@@ -1,26 +1,22 @@
 import Balance from '../Models/Balance';
 import getBalances from './GetBalances';
 
-class Resp{
-   highest: Balance;
-   lowest: Balance;
-}
-
 const highestLowest = async() => {
    const balances: Balance[] = await getBalances();
-   const resp: Resp = new Resp();
-   resp.highest = await getHighest(balances);
-   resp.lowest = await getLowest(balances);
-   return resp;
+
+   return {
+      highest: await getHighest(balances),
+      lowest: await getLowest(balances)
+   }
 }
 
-const getHighest = async(balances: Balance[]) => {
+const getHighest = async(balances: Balance[]): Promise<Balance> => {
   return balances.reduce((prev, current) => {
       return (prev.balance > current.balance) ? prev : current;
     });
 }
 
-const getLowest = async(balances: Balance[]) => {
+const getLowest = async(balances: Balance[]): Promise<Balance> => {
    return balances.reduce((prev, current) => {
       return (prev.balance < current.balance) ? prev : current;
     });
